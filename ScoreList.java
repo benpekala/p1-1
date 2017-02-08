@@ -14,7 +14,7 @@
 // Online sources: avoid web searches to solve your problems, but if you do 
 // search, be sure to include Web URLs and description of 
 // of any information you find. 
-//small change test
+// small change test
 //////////////////////////// 80 columns wide //////////////////////////////////
 
 /**
