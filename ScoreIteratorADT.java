@@ -1,5 +1,4 @@
-
-public interface ScoreIteratorADT {
+public interface ScoreIteratorADT  {
 
 	public Score next();
 	

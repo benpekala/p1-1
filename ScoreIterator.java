@@ -4,12 +4,26 @@ public class ScoreIterator implements ScoreIteratorADT {
 
 	private ScoreList myList;
 	private int curPos;
+	private String catergory;
+	private int[] indexArray;
 	
 	public ScoreIterator (ScoreList myList, String catergory)
 	{
 		this.myList = myList;
 		curPos = 0;
-		//TODO implement catergory selection
+		indexArray = new int[myList.size()];
+		
+		for (int i = 0; i < myList.size(); i++)
+		{
+			int counter = 0;
+			if (myList.get(i).getCategory().toLowerCase().equals(catergory))
+			{
+				
+				indexArray[counter] = i;
+				counter++;
+			}
+		}
+		
 	}
 	
 	@Override
@@ -18,14 +32,12 @@ public class ScoreIterator implements ScoreIteratorADT {
 		{
 			throw new NoSuchElementException();
 		}
-		Score result = myList.get(curPos);
-		curPos++;
-		return result;
+		return myList.get(indexArray[curPos++]);
 	}
 
 	@Override
 	public boolean hasNext() {
-		return curPos < myList.size();	
+		return curPos < indexArray.length;	
 	}
 
 }
