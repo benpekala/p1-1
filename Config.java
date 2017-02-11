@@ -5,7 +5,7 @@ public class Config {
 	public static final String[] GRADE_LETTER = {"A","B","C","D","F","N"};
 
 	/** Default grade thresholds used if no grade info file provided. */
-	public static double[] GRADE_THRESHOLD = {90,80,70,60,50,10,0};
+	public static double[] GRADE_THRESHOLD = {90,80,70,60,5,0};
 
 	/** Default score categories used if no grade info file provided. */
 	public static String[] CATEGORY_KEY = {"homeworks","programs","midterms","final"};
