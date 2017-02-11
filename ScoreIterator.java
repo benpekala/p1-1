@@ -6,25 +6,27 @@ public class ScoreIterator implements ScoreIteratorADT {
 	private int curPos;
 	private String catergory;
 	private int[] indexArray;
+	int catSize;
 	
 	public ScoreIterator (ScoreList myList, String catergory)
 	{
 		this.myList = myList;
+		this.catergory = catergory;
 		curPos = 0;
 		indexArray = new int[myList.size()];
+		catSize = 0;
 		
 		for (int i = 0; i < myList.size(); i++)
 		{
-			int counter = 0;
 			if (myList.get(i).getCategory().toLowerCase().equals(catergory))
 			{
 				
-				indexArray[counter] = i;
-				counter++;
+				indexArray[catSize] = i;
+				catSize++;
 			}
 		}
 		
-	}
+	}           
 	
 	@Override
 	public Score next() {
@@ -37,7 +39,7 @@ public class ScoreIterator implements ScoreIteratorADT {
 
 	@Override
 	public boolean hasNext() {
-		return curPos < indexArray.length;	
+		return curPos < catSize;	
 	}
 
 }

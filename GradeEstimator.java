@@ -1,5 +1,6 @@
 
 	import java.io.File;
+
 	import java.io.FileNotFoundException;
 	import java.util.Scanner;
 
@@ -13,31 +14,49 @@
 		private static ScoreList scoreList;
 		
 		public GradeEstimator(String[] letterGrades, String[] minThreshholds, String[] catNames, 
-				String[] catWeights, ScoreList scoreList)
+				String[] catWeights)
 		{
 			this.letterGrades = letterGrades;
 			this.minThreshholds = minThreshholds;
 			this.catNames = catNames;
 			this.catWeights = catWeights;
-			this.scoreList = scoreList;
+
 		}
 		public static void main(String[] args) {
+//		//////TESTING///////
+//					String[] lg = {"A", "B", "C", "D", "F", "N"};
+//					String[] mt = {"90", "80", "70", "60", "5", "0"};
+//					String[] cn = {"homework", "program", "midterm", "final"};
+//					String[] cw = {"20", "25", "34", "21"};
+//					ScoreList scoreList = new ScoreList();
+//					scoreList.add( new Score( "h1", 34, 50 ) );
+//					scoreList.add( new Score( "h2", 29, 30 ) );
+//					scoreList.add( new Score( "p1",195, 200 ) );
+//					scoreList.add( new Score( "p2",230, 240 ) );
+//					scoreList.add( new Score( "p3", 50, 80 ) );
+//					scoreList.add( new Score( "m1", 57, 66 ) );
+//					scoreList.add( new Score( "m2", 61, 66 ) );
+//					scoreList.add( new Score( "f" , 78, 81 ) );
+//					GradeEstimator ge1 = new GradeEstimator(lg, mt, cn, cw, scoreList);
+//					System.out.println(ge1.getEstimateReport());
+					////////////////////
 			GradeEstimator ge;
-			if (args.length != 1 || args[0] == null)
+			if (args.length < 1 || args[0] == null)
 			{
 				System.out.println(Config.USAGE_MESSAGE);
+				//ge = new GradeEstimator(Config.GRADE_LETTER, Config.GRADE_THRESHOLD, Config.CATEGORY_KEY, Config.CATEGORY_WEIGHT);
 			}
 			else
 			{
 				try{
-					ge = createGradeEstimatorFromFile("no_file_exists.txt");
-					ge.getEstimateReport();
+					ge = createGradeEstimatorFromFile(args[0]);
+					System.out.println(ge.getEstimateReport());
 
 				}catch(GradeFileFormatException e){
-					
+					System.out.println(e);
 				}
 				catch(FileNotFoundException e){
-					System.out.println("File Not Found");
+					System.out.println(e);
 				}
 			}
 			
@@ -46,54 +65,77 @@
 		public static GradeEstimator createGradeEstimatorFromFile( String gradeInfo ) 
 			      throws FileNotFoundException, GradeFileFormatException
 			      {
+						scoreList = new ScoreList();
 						File file = new File(gradeInfo);
 						Scanner read = new Scanner( file );		
+						int line = 1;
 						while (read.hasNextLine())
 						{
-							int line = 1;
-							
-							String line1 = read.nextLine();
-							if (line1.contains("#"))
+							String curLine = read.nextLine();
+							if (curLine.contains("#"))
 							{
-								line1 = line1.substring(0, line1.indexOf("#"));
+								curLine = curLine.substring(0, curLine.indexOf("#"));
 							}
 							
 							switch (line)
 							{
 								case 1: 
-									letterGrades = line1.split("\\s+");
-									for (int i = 0; i < letterGrades.length; i++)
+									Scanner check = new Scanner(curLine);
+									while (check.hasNext())
 									{
-										if ((letterGrades[i].charAt(0) < 65 || letterGrades[i].charAt(0) > 90) 
-												|| (letterGrades[i].charAt(0) > 97 || letterGrades[i].charAt(0) > 122))
+										if (check.hasNextInt() || check.hasNextDouble())
 										{
 											throw new GradeFileFormatException();
 										}
+										check.next();
 									}
+									letterGrades = curLine.split("\\s+");
+//									for (int i = 0; i < letterGrades.length; i++)
+//									{
+//										if ((letterGrades[i].charAt(0) < 65 || (letterGrades[i].charAt(0) > 90 
+//												&& letterGrades[i].charAt(0) < 97) || letterGrades[i].charAt(0) > 122))
+//										{
+//											throw new GradeFileFormatException();
+//										}
+//									}
 									break;
 								case 2:
-									minThreshholds = line1.split("\\s+");
+									check = new Scanner(curLine);
+									while (check.hasNext())
+									{
+										if (!(check.hasNextInt()))
+										{
+											throw new GradeFileFormatException();
+										}
+										check.next();
+									}
+									minThreshholds = curLine.split("\\s+");
 									if (letterGrades.length != minThreshholds.length)
 									{
 										throw new GradeFileFormatException();
 									}
 									
-									for (int i = 0; i < letterGrades.length; i++)
+//									for (int i = 0; i < letterGrades.length; i++)
+//									{
+//										if (minThreshholds[i].charAt(0) < 48 || minThreshholds[i].charAt(0) > 57)
+//										{
+//											throw new GradeFileFormatException();
+//										}
+//									}
+									
+									if (Integer.parseInt(minThreshholds[minThreshholds.length - 1]) != 0)
 									{
-										if (minThreshholds[i].charAt(0) < 48 || minThreshholds[i].charAt(0) > 57)
-										{
-											throw new GradeFileFormatException();
-										}
+										throw new GradeFileFormatException();
 									}
 									break;
 								case 3:
-									catNames = line1.split("\\s+");
+									catNames = curLine.split("\\s+");
 									break;
 								case 4:
-									catWeights = line1.split("\\s+");
+									catWeights = curLine.split("\\s+");
 									break;
 								default:
-									tempScore = line1.split("\\s+");
+									tempScore = curLine.split("\\s+");
 									scoreList.add(new Score(tempScore[0],Double.parseDouble(tempScore[1]), Double.parseDouble(tempScore[2])));
 									
 							}
@@ -102,11 +144,59 @@
 						}
 						read.close();
 					
-					return new GradeEstimator(letterGrades, minThreshholds, catNames, catWeights, scoreList);
+					return new GradeEstimator(letterGrades, minThreshholds, catNames, catWeights);
 				}
 		
 		public String getEstimateReport(){
-		//String message = "Grade estimate is based on " + scoreList.size() + " scores.";
+		
+			String estimates = "";
+			String assignments = "";
+			double weightedPercent = 0;
+			
+			
+			for( int i = 0; i<catNames.length; i++){
+				ScoreIterator curr = new ScoreIterator(scoreList, catNames[i].substring(0, 1).toLowerCase());
+//System.out.println(catNames[i]+ " is the category");
+				int numItems = 0;
+				double grade=0;
+				Score currentScore;
+				if (!curr.hasNext())
+				{
+					grade = 100;
+					numItems = 1;
+				}
+				while( curr.hasNext() ){
+					currentScore = curr.next();
+//System.out.println( currentScore.name );
+					numItems++;
+					grade += currentScore.getPercent();
+					assignments += String.format(currentScore.getName() + "   %.2f"  + "\n", currentScore.getPercent());
+					
+				}
+				double rawPercent = grade/numItems;
+				int  weight = Integer.parseInt(catWeights[i]);
+				double weightedAvg = weight * rawPercent / 100;
+				weightedPercent += weightedAvg;
+				estimates +=  String.format("%7.2f%% = %5.2f%% * " +  weight + "%% for " + catNames[i] + "\n", weightedAvg, rawPercent);
+				
+			}
+			int gradeCounter = minThreshholds.length - 1;
+			while (weightedPercent > Integer.parseInt(minThreshholds[gradeCounter]))
+			{
+				gradeCounter--;
+			}
+			
+			//catAvgs[1].add(new Score("p1", 20, 30));
+			//System.out.println(catAvgs[1].get(0).getCategory());
+			String a = String.format("%7.2f", weightedPercent);
+			return assignments + "Grade estimate is bassed on " + scoreList.size() + " scores\n" + estimates + "--------------------------------\n"
+					+ a + "% weighted percent\nLetter Grade Estimate: " + letterGrades[gradeCounter + 1];
+			
+			
+			
+			
+			
+//String message = "Grade estimate is based on " + scoreList.size() + " scores.";
 //		
 //		int aIndex = 0, pIndex = 0, mIndex = 0, fIndex = 0, hIndex = 0, dIndex = 0;
 //		String defaultCase = "";
@@ -169,17 +259,17 @@
 //			}
 //		}
 		
-		String message = "";
-		
-		for (int i = 0; i < catNames.length; i++)
-		{
-			
-		}
-		
-		
-		
-		
-		return null;
+//		String message = "";
+//		
+//		for (int i = 0; i < catNames.length; i++)
+//		{
+//			
+//		}
+//		
+//		
+//		
+//		
+//		return null;
 		}
 	
 
