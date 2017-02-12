@@ -1,0 +1,72 @@
+import java.util.NoSuchElementException;
+/**
+ * This class constructs a score iterator object, derived from the interface scoreIterator
+ * ADT. This class can be called to iterate through scores, containing methods
+ * and fields relevant to score objects.
+ *
+ * @author Team Odin Sphere
+ */
+public class ScoreIterator implements ScoreIteratorADT {
+
+	private ScoreList myList;
+	private int curPos;
+	/**
+	 * This method is the constructor for the scoreIterator class
+	 *
+	 * PRECONDITIONS: a scorelist exists that can be passed to the iterator, also
+	 * the user has catagories to place the list in
+	 * 
+	 * POSTCONDITIONS: a scoreIterator object has been created
+	 *
+	 * @param ScoreList myList this parameter is where a Scorelist is passed into
+	 * @param String category this parameter passes a string as the name for a desired
+	 * category
+	 * @return no return value
+	 */
+	public ScoreIterator (ScoreList myList, String catergory)
+	{
+		this.myList = myList;
+		curPos = 0;
+		//TODO implement catergory selection
+	}
+	/**
+	 * This method checks to make sure that there is a next object(throws error if not)
+	 * and if there is returns the value of the next one and updates the current position
+	 *
+	 * PRECONDITIONS: the method is being called on a Score object
+	 * 
+	 * POSTCONDITIONS: a Score object has been returned and current position has been updated
+	 *
+	 * @return returns a score object
+	 */
+	@Override
+	public Score next() {
+	
+		/* checks to make sure that there is a next element, throwing exception if not
+		 * sets temporary variable of the score at the current position and 
+		 * then updates the current position. returns the score at the previous current position
+		 */
+		if (!hasNext())
+		{
+			throw new NoSuchElementException();
+		}
+		Score result = myList.get(curPos);
+		curPos++;
+		return result;
+	}
+	/**
+	 * This method returns a boolean based on whether or not there is another score object
+	 * at the current iindex
+	 *
+	 * PRECONDITIONS: the object this is called in reference to has the appropriate private fields
+	 * 
+	 * POSTCONDITIONS: a boolean has been returned
+	 *
+	 * @return a boolean relevant to whether or not there is another object
+	 */
+	@Override
+	public boolean hasNext() {
+		return curPos < myList.size();	
+	}
+
+}
