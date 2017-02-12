@@ -1,11 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 // Semester:         CS367 Spring 2017 
-// PROJECT:          p0
+// PROJECT:          p1
 // FILE:             ScoreList.java
 //
-// Authors: Patrick Lown
-// Author1: (name1,email1,netID1,lecture number1)
-// Author2: (name2,email2,netID2,lecture number2)
+// Authors/Collaborators: Patrick Lown, Hayley Raj, Ryan Ramsdell, Ilhan Bok, Abhi Kumar, Ben Pekala
+// Author: Patrick Lown, lown@wisc.edu, lown, 003
+// Collaborator 1: Hayley Raj, hraj@wisc.edu, hraj, 003
+// Collaborator 2: Ryan Ramsdell, ramsdell2@wisc.edu, ramsdell2, 003
+// Collaborator 3: Ilhan Bok, ibok@wisc.edu, ibok, 003
+// Collaborator 4: Abhi Kumar,akumar63@wisc.edi,abhik,003
 //
 // ---------------- OTHER ASSISTANCE CREDITS 
 // Persons: Identify persons by name, relationship to you, and email. 
@@ -14,7 +17,6 @@
 // Online sources: avoid web searches to solve your problems, but if you do 
 // search, be sure to include Web URLs and description of 
 // of any information you find. 
-// small change test
 //////////////////////////// 80 columns wide //////////////////////////////////
 
 /**
